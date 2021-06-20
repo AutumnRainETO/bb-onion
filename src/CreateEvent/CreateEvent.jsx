@@ -19,6 +19,7 @@ import Select from "@material-ui/core/Select";
 import Button from "@material-ui/core/Button";
 import SendIcon from "@material-ui/icons/Send";
 import moment from "moment";
+import CreateEventAPI from "./CreateEvent.api";
 
 const useStyles = makeStyles({
   root: {
@@ -75,10 +76,17 @@ const CreateEvent = () => {
   const handleSend = () => {
     setEventData((prevState) => ({
       ...prevState,
-      startDateTime: (new Date(eventData.startDateTime).toISOString()),
+      startDateTime: (new Date(eventData.startDateTime).toISOString()), // convert time to iso string for consistency
     }));
+    CreateEventAPI.post(eventData)
+    .then(() => {
+      alert('Event Posted Successfully');
+    })
+    .catch((e) => {
+      console.log(e);
+      alert('Event Creation Failed: Check console log for more details');
+    })
     setIsSent(true);
-    // TODO: Send data to api
   };
 
   return (
